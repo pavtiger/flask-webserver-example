@@ -1,29 +1,24 @@
-from dataclasses import dataclass
 from threading import Thread
-import unicodedata as ud
-import json
-import math
 import time
 
 import eventlet
-from flask_socketio import SocketIO
 from flask import Flask, send_from_directory, render_template
 
 from ip import ip_address, port
 
+
+# Init app
 async_mode = None
-app = Flask(__name__, static_url_path='')
-socketio = SocketIO(app, async_mode=async_mode)
+app = Flask(__name__, static_url_path='/')
 
 
-
-# Main page
+# Return main page
 @app.route('/')
 def root():
     return render_template('main.html')
 
 
-# Get files from server (etc. libs)
+# Get files from server (e.g libs)
 @app.route('/js/<path:path>')
 def send_js(path):
     return send_from_directory('js', path)
@@ -38,10 +33,11 @@ def game_loop(name):
 
 
 if __name__ == "__main__":
-    eventlet.monkey_patch()
-
-    x = Thread(target=game_loop, args=(1,))
-    x.start()
+    # This code and game_loop() are needed if you want to do wome tasks in background of the app (e.g. collision check)
     
-    print(f'Listening on http://{ip_address}:{port}')
-    socketio.run(app, host=ip_address, port=port)
+    # eventlet.monkey_patch()
+    # x = Thread(target=game_loop, args=(1,))
+    # x.start()
+    
+    app.run(host=ip_address, port=port)
+
