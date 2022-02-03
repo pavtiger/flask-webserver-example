@@ -9,7 +9,7 @@ from ip import ip_address, port
 
 # Init app
 async_mode = None
-app = Flask(__name__, static_url_path='/')
+app = Flask(__name__, static_url_path='')
 
 
 # Return main page
